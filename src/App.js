@@ -1,20 +1,33 @@
-import { useState } from 'react';
+import {useState, useEffect} from 'react';
 import './App.css';
 import Viewer from './Viewer';
-import Control from './Control';
+import Controller from './Control';
 
 function App() {
-  const [count, setCount] = useState(0);
+  var [count,setCount] = useState(0);
+  var handleSetCount = (value) => {
+    setCount(count + value);
+  }
 
-  const onSetCount = (value) => {
-     // value가 0일 경우 count를 0으로 설정
-    setCount(value === 0 ? 0 : count + value);
+  const reset = () => {
+    setCount(0);
   };
+
+  useEffect( ()=>{console.log('업데이트')},[count]);
+
+  useEffect( () => {
+      console.log('Component unmounted');
+      return () => {
+        console.log('Component unmounted');
+    };
+  },[]);
+
 
   return (
     <div className="App">
-      <Viewer count={count} /> {/* count 값을 올바르게 전달 */}
-      <Control onSetCount={onSetCount} /> {/* onSetCount를 props로 전달 */}
+      <Viewer count={count}/>
+      <Controller handleSetCount={handleSetCount} reset={reset}/>
+      <hr/>
     </div>
   );
 }
